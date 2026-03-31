@@ -2,7 +2,16 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import FoodItem, Order
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import FoodItemSerializer
+from .models import FoodItem
 
+@api_view(['GET'])
+def food_list(request):
+    foods = FoodItem.objects.all()
+    serializer = FoodItemSerializer(foods, many=True)
+    return Response(serializer.data)
 
 def get_food(request):
     foods = FoodItem.objects.all()
